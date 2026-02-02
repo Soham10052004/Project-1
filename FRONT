@@ -1,18 +1,21 @@
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 function App() {
-  const submitJob = async () => {
-    await axios.post(
-      process.env.REACT_APP_API_URL + "/submit",
-      { job: "sample-job" }
-    );
-    alert("Job submitted successfully");
-  };
+  const [status, setStatus] = useState({});
+
+  useEffect(() => {
+    axios.get(process.env.REACT_APP_API_URL + "/status")
+      .then(res => setStatus(res.data));
+  }, []);
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>Cloud Automation Dashboard</h2>
-      <button onClick={submitJob}>Submit Job</button>
+      <h1>Cloud Automation Portal</h1>
+
+      <p><b>System State:</b> {status.system}</p>
+      <p><b>Automation:</b> {status.automation}</p>
+      <p><b>Cluster Load:</b> {status.load}</p>
     </div>
   );
 }
